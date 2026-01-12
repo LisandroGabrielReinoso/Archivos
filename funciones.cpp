@@ -5,9 +5,9 @@
 #include "structs.h"
 #include <ctype.h>
 
-void carga_org_flia(FILE arch_Org_flia, Org_flia of, int n)
+void carga_org_flia(FILE arch_Org_flia, Org_flia of)
 {
-    bool corte = false;
+    bool corte = false; int op;
     while(corte != true)
     {
         
@@ -22,20 +22,19 @@ void carga_org_flia(FILE arch_Org_flia, Org_flia of, int n)
         printf("\nIngrese el Correo de la Organizacion/Familia: "); 
         scanf("%s",&of.correo);
 
-        fwrite(&of, sizeof(Org_flia), 1, &arch_Org_flia);
+        fwrite(&of, sizeof(Org_flia), 1, arch_Org_flia);
 
-        printf("\n\nDesea cargar otra Organizacion/Familia? (1-SI / 0-NO): "); scanf("%d", &n);
-        if(n == 0) corte = true;
+        printf("\n\nDesea cargar otra Organizacion/Familia? (1-SI / 0-NO): "); scanf("%d", &op);
+        if(op == 0) corte = true;
         
     }
     
 }
 
-bool validar_id(int id, FILE arch_Org_flia, FILE arch_donaciones,Org_flia of, Donacion d)
+bool validar_id(int id)
 { 
     char caracteres_prohibidos[100] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,+- ";
     char id_str[20];  sprintf(id_str, "%d", id);
-
     
     if(strpbrk(id_str, caracteres_prohibidos) || id < 1 ) return false;
     else return true;
