@@ -9,7 +9,7 @@ struct fecha {
 };
 
 struct Org_flia {
-	int id_org_flia;
+	char id_org_flia[20];
 	char nombre[50];
 	char direccion[100];
 	char telefono[20];
