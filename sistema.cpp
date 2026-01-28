@@ -16,54 +16,35 @@ int main() {
 
     Org_flia of; Donacion d; fecha f;
     
-    system("cls");
-    menu_principal();
-    
-    int op, op1, op2; printf("Opcion: "); scanf("%d", &op);
-    while(getchar() != '\n'); // <- Limpia el buffer después de leer la opción principal
-    bool b=false; 
+    int op;
+    bool salir = false;
 
-    while(b != true)
-    {
-        switch(op)
+    while (salir != true) {
+
+        system("cls");
+        menu_principal();
+        printf("Opcion: "); scanf("%d", &op);
+
+        switch(op) 
         {
             case 1:
-                b=true;
                 system("cls");
-                menu_gestion_org_flia();
-                printf("Opcion: "); scanf("%d", &op1); while(getchar() != '\n');
-
-                switch (op1)
-                {
-                    case 1:
-                        system("cls");
-                        carga_org_flia(arch_org_flia, of);
-                    break;
-
-                    case 2:
-                        system("cls");
-                        eliminar_org_flia(arch_org_flia, of);
-                    break;
-
-                    
-                    case 4:
-                        system("cls");
-                        listar_org_flia(arch_org_flia, of);
-                    break;
-                    default:
-                    break;
-                }
-            break;
+                menu_gestion_org_flia(arch_org_flia, of);
+                break;
 
             case 2:
-                //gestionar_donaciones(donaciones, org_flia, donacionxorg_flia);
-                b=true;
+                system("cls");
+                gestionar_donaciones(arch_donaciones, d);
+                break;
+
+            case 3:
+                salir = true;
                 break;
 
             default:
-                printf("Opcion invalida. Ingrese una opcion valida.\n"); system("pause"); system("cls");
-                menu_principal();
-                printf("Opcion: "); scanf("%d", &op);
+                printf("Opcion invalida. Ingrese una opcion valida.\n");
+                system("pause");
+                break;
         }
     }
 

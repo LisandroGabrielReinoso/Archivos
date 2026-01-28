@@ -17,7 +17,8 @@ struct Org_flia {
 };
 
 struct Donacion {
-	int id_donacion;
+	char id_donacion[20];
+	char id_org_flia[20];
 	char nombre[100];
 	char tipo_donacion[20];
 	fecha fecha_donacion;
