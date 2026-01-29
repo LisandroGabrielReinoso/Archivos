@@ -96,11 +96,13 @@ void listar_org_flia(FILE *arch_Org_flia, Org_flia of)
     rewind(arch_Org_flia);
     printf("\n\n******************** LISTA DE FAMILIAS/ORGANIZACIONES REGISTRADA *********************\n\n");
     printf("%-5s %-20s %-25s %-15s %-30s\n","ID", "Nombre", "Direccion", "Telefono", "Correo");
-    printf("-------------------------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------------------\n");
 
     while (fread(&of, sizeof(Org_flia), 1, arch_Org_flia))
     {
         printf("%-5s %-20s %-25s %-15s %-30s\n",of.id_org_flia,of.nombre,of.direccion, of.telefono,of.correo);
+        printf("-----------------------------------------------------------------------------------------------\n");
+        
     }
 
     system("pause");
@@ -250,13 +252,13 @@ void carga_donacion(FILE *arch_donaciones, Donacion d)
             printf("Ingrese el año que se hizo la donacion: "); 
             if(scanf("%s",&d.fecha_donacion.anio) == 0)
             {
-                printf("Mes invalido, ingrese formato valido\n");
+                printf("año invalido, ingrese formato valido\n");
                 continue;
             } 
             while(getchar() != '\n');
            
 
-            printf("\nIngrese uan descripcion o detalle que considere importante: "); 
+            printf("\nIngrese una descripcion o detalle que considere importante: "); 
             fgets(d.descripcion, sizeof(d.descripcion), stdin);
             d.descripcion[strcspn(d.descripcion, "\n")] = '\0';
 
@@ -270,16 +272,31 @@ void carga_donacion(FILE *arch_donaciones, Donacion d)
 
 void listar_donaciones(FILE *arch_donaciones, Donacion d)
 {
+    FILE *arch_Org_flia = fopen("org_flia.dat", "rb");  
+    Org_flia of;
+
     rewind(arch_donaciones);
-    printf("\n\n******************** LISTA DE DONACIONES REGISTRADAS *********************\n\n");
-    printf("%-5s %-20s %-20s %-15s %-15s %-30s\n","ID", "ID Org/Familia", "Nombre", "Tipo", "Fecha", "Descripcion");
-    printf("-------------------------------------------------------------------------------------\n");
+    printf("\n\n==================== LISTA DE DONACIONES REGISTRADAS ====================\n\n");
+    printf("ID         Nombre Donacion           Organizacion/Familia           Tipo de donacion          Fecha        Descripcion\n");
+    printf("-----------------------------------------------------------------------------------------------------------------------------\n");
 
     while (fread(&d, sizeof(Donacion), 1, arch_donaciones))
     {
-        printf("%-5s %-20s %-15s %02d/%02d/%04d %-30s\n",d.id_donacion, d.nombre, d.tipo_donacion, d.fecha_donacion.dia, d.fecha_donacion.mes, d.fecha_donacion.anio, d.descripcion);
-    }
+        rewind(arch_Org_flia);
+        while (fread(&of, sizeof(Org_flia), 1, arch_Org_flia))
+        {
+            if (strcmp(d.id_org_flia, of.id_org_flia) == 0)
+            {
+                printf("%-10s %-25s %-30s %-20s %d/%d/%d %-40s\n", d.id_donacion, d.nombre, of.nombre, d.tipo_donacion, d.fecha_donacion.dia, 
+                       d.fecha_donacion.mes, 
+                       d.fecha_donacion.anio, 
+                       ".....");
+                printf("-----------------------------------------------------------------------------------------------------------------------------\n");
 
+                break;
+            }
+        }
+    }
     system("pause");
 }
 
