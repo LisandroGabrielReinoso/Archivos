@@ -72,8 +72,9 @@ void gestionar_donaciones(FILE *arch_donaciones, Donacion d)
         printf("\n\n\n******************** GESTION DE DONACIONES/AYUDAS ********************\n");
         printf("\nSeleccione el numero de una de las opciones para continuar\n\n");
         printf("1 - Agregar Nueva Donacion/Ayuda\n");
+        printf("3 - Eliminar Donacion\n");
         printf("4 - Listar Donaciones/Ayudas\n");
-        printf("3 - Volver al Menu Principal\n\n");
+        printf("5 - Volver al Menu Principal\n\n");
 
         printf("Opcion: "); scanf("%d", &op1);
 
@@ -85,16 +86,24 @@ void gestionar_donaciones(FILE *arch_donaciones, Donacion d)
                 system("cls");
                 break;
 
+            case 3:
+                system("cls");
+                eliminar_donacion(arch_donaciones, d);
+                system("cls");
+                break;
+
             case 4:
                 system("cls");
                 listar_donaciones(arch_donaciones, d);
                 system("cls");
                 break;
 
-            case 3:
-                system("cls");
+            
+            case 5:
                 return;
-
+                system("cls");
+                break;
+                
             default:
                 printf("Opcion invalida, intente de nuevo.\n");
                 system("pause");

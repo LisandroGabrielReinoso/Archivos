@@ -10,9 +10,9 @@ int main() {
 
     FILE *arch_org_flia = fopen("org_flia.dat", "ab+");
     FILE *arch_donaciones = fopen("donaciones.dat", "ab+");
-    FILE *arch_donacionxorg_flia = fopen("donacionxorg_flia.dat", "ab+");
+    //FILE *arch_donacionxorg_flia = fopen("donacionxorg_flia.dat", "ab+");
     
-    if (arch_org_flia == NULL || arch_donaciones == NULL || arch_donacionxorg_flia == NULL) printf("Error al abrir los archivos.\n");
+    if (arch_org_flia == NULL || arch_donaciones == NULL) printf("Error al abrir los archivos.\n");
 
     Org_flia of; Donacion d; fecha f;
     
