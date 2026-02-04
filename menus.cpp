@@ -22,7 +22,8 @@ void menu_gestion_org_flia(FILE *arch_org_flia, Org_flia of) {
         printf("2 - Modificar Datos de Familia/Organizacion\n");
         printf("3 - Eliminar Familia/Organizacion\n");
         printf("4 - Listar Familias/Organizaciones\n");
-        printf("5 - Volver al Menu Principal\n\n");
+        printf("5 - Listar Donaciones de una Familias/Organizaciones\n");
+        printf("6 - Volver al Menu Principal\n\n");
 
         printf("Opcion: "); scanf("%d", &op1);
 
@@ -43,8 +44,8 @@ void menu_gestion_org_flia(FILE *arch_org_flia, Org_flia of) {
             case 3:
                 system("cls");
                 eliminar_org_flia(arch_org_flia, of);
+                // ← REABRE AQUÍ
                 system("cls");
-                break;
 
             case 4:
                 system("cls");
@@ -53,6 +54,11 @@ void menu_gestion_org_flia(FILE *arch_org_flia, Org_flia of) {
                 break;
 
             case 5:
+                system("cls");
+                donaciones_x_org_flia(arch_org_flia, of);
+                system("cls");
+
+            case 6:
                 system("cls");
                 return;
 
@@ -96,6 +102,9 @@ void gestionar_donaciones(FILE *arch_donaciones, Donacion d)
             case 3:
                 system("cls");
                 eliminar_donacion(arch_donaciones, d);
+                // ← REABRE AQUÍ
+                fclose(arch_donaciones);
+                arch_donaciones = fopen("donaciones.dat", "rb");
                 system("cls");
                 break;
 

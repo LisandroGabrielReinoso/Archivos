@@ -22,7 +22,7 @@ struct Donacion {
 	char nombre[100];
 	char tipo_donacion[20];
 	fecha fecha_donacion;
-	char descripcion[350];
+	char descripcion[550];
 };
 
 #endif

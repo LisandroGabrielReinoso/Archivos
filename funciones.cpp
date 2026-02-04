@@ -50,9 +50,7 @@ void carga_org_flia(FILE *arch_Org_flia, Org_flia of)
     
         while(corte != true)
         {    
-            printf("Ingrese el ID unico de la Organizacion/Familia: "); 
-            fgets(of.id_org_flia, 20, stdin); 
-            of.id_org_flia[strcspn(of.id_org_flia, "\n")] = 0;
+            printf("Ingrese el ID unico de la Organizacion/Familia: "); gets(of.id_org_flia);
 
             if(id_invalido(of.id_org_flia) || id_repetido_org_flia(arch_Org_flia, of.id_org_flia))
             {
@@ -60,17 +58,11 @@ void carga_org_flia(FILE *arch_Org_flia, Org_flia of)
                 continue;
             }
 
-            printf("\nIngrese el Nombre/Apellido de la Organizacion/Familia: "); 
-            scanf("%s",&of.nombre);
-            while(getchar() != '\n');
+            printf("\nIngrese el Nombre/Apellido de la Organizacion/Familia: "); gets(of.nombre);
 
-            printf("\nIngrese la Direccion de la Organizacion/Familia: ");
-            fgets(of.direccion, sizeof(of.direccion), stdin);
-            of.direccion[strcspn(of.direccion, "\n")] = '\0';
+            printf("\nIngrese la Direccion de la Organizacion/Familia: "); gets(of.direccion);
 
-            printf("\nIngrese el Telefono de la Organizacion/Familia: "); 
-            scanf("%s",&of.telefono);
-            while(getchar() != '\n');
+            printf("\nIngrese el Telefono de la Organizacion/Familia: "); gets(of.telefono);
 
             if(telefono_invalido(of.telefono))
             {
@@ -78,16 +70,12 @@ void carga_org_flia(FILE *arch_Org_flia, Org_flia of)
                 continue;
             }
 
-            printf("\nIngrese el Correo de la Organizacion/Familia: "); 
-            scanf("%s",&of.correo);
-            while(getchar() != '\n');
-
+            printf("\nIngrese el Correo de la Organizacion/Familia: "); gets(of.correo);
             fwrite(&of, sizeof(Org_flia), 1, arch_Org_flia);
 
             printf("\n\nDesea cargar otra Organizacion/Familia? (1-SI / 0-NO): "); scanf("%d", &op);
-            while(getchar() != '\n');
+            while(getchar() != '\n'); //se limpia el salto de linea que queda en el buffer por el scanf
             if(op == 0) corte = true;
-        
         } 
 }
 
@@ -113,10 +101,9 @@ void eliminar_org_flia(FILE *arch_Org_flia, Org_flia of)
     FILE *arch_temp = fopen("temp.dat", "wb");
     FILE *arch_donaciones = fopen("donaciones.dat", "rb");
     Donacion d;
-    fflush(stdin);
-    printf("Ingrese el ID de la Organizacion/Familia a eliminar: ");
-    fgets(id_eliminar, 20, stdin);
-    id_eliminar[strcspn(id_eliminar, "\n")] = 0;
+
+    fflush(stdin); 
+    printf("Ingrese el ID de la Organizacion/Familia a eliminar: "); gets(id_eliminar);
 
     rewind(arch_donaciones);
     while (fread(&d, sizeof(Donacion), 1, arch_donaciones))
@@ -149,6 +136,8 @@ void eliminar_org_flia(FILE *arch_Org_flia, Org_flia of)
     remove("org_flia.dat");
     rename("temp.dat", "org_flia.dat");
 
+    arch_Org_flia = fopen("org_flia.dat", "rb+"); // aqui se reabre el archivo para futuras operaciones
+
     if (encontrado) printf("Organizacion/Familia con ID %s eliminada exitosamente.\n", id_eliminar);
 
     else printf("No se encontro una Organizacion/Familia con ID %s.\n", id_eliminar);   
@@ -160,10 +149,8 @@ void actualizar_org_flia(FILE *arch_Org_flia, Org_flia of)
 {
     char id_modificar[20];
     bool encontrado = false;
-
-    printf("Ingrese el ID de la Organizacion/Familia a modificar: ");
-    fgets(id_modificar, 20, stdin);
-    id_modificar[strcspn(id_modificar, "\n")] = 0;
+    fflush(stdin); 
+    printf("Ingrese el ID de la Organizacion/Familia a modificar: "); gets(id_modificar);
 
     arch_Org_flia = fopen("org_flia.dat", "rb+");
     rewind(arch_Org_flia);
@@ -174,21 +161,13 @@ void actualizar_org_flia(FILE *arch_Org_flia, Org_flia of)
         {
             encontrado = true;
 
-            printf("Ingrese el nuevo Nombre/Apellido de la Organizacion/Familia: "); 
-            scanf("%s",&of.nombre);
-            while(getchar() != '\n');
+            printf("Ingrese el nuevo Nombre/Apellido de la Organizacion/Familia: "); gets(of.nombre);
 
-            printf("Ingrese la nueva Direccion de la Organizacion/Familia: ");
-            fgets(of.direccion, sizeof(of.direccion), stdin);
-            of.direccion[strcspn(of.direccion, "\n")] = '\0';
+            printf("Ingrese la nueva Direccion de la Organizacion/Familia: "); gets(of.direccion);
 
-            printf("Ingrese el nuevo Telefono de la Organizacion/Familia: "); 
-            scanf("%s",&of.telefono);
-            while(getchar() != '\n');
+            printf("Ingrese el nuevo Telefono de la Organizacion/Familia: "); gets(of.telefono);
 
-            printf("Ingrese el nuevo Correo de la Organizacion/Familia: "); 
-            scanf("%s",&of.correo);
-            while(getchar() != '\n');
+            printf("Ingrese el nuevo Correo de la Organizacion/Familia: "); gets(of.correo);
 
             fseek(arch_Org_flia, -sizeof(Org_flia), SEEK_CUR);
             fwrite(&of, sizeof(Org_flia), 1, arch_Org_flia);
@@ -198,11 +177,49 @@ void actualizar_org_flia(FILE *arch_Org_flia, Org_flia of)
 
     if (encontrado) printf("Organizacion/Familia con ID %s modificada exitosamente.\n", id_modificar);
     else printf("No se encontro una Organizacion/Familia con ID %s.\n", id_modificar);
+
+    system("pause");
+    fclose(arch_Org_flia);
 }
 
 
-//-------------------------------------------------------------------------------------------------------------
+void donaciones_x_org_flia(FILE *arch_Org_flia, Org_flia of)
+{
+    FILE *arch_donaciones = fopen("donaciones.dat", "rb"); Donacion d;
+    char id_buscar[20];
 
+    fflush(stdin);
+    printf("Ingrese el ID de la Organizacion/Familia para listar sus donaciones: "); gets(id_buscar);
+    rewind(arch_Org_flia); 
+    bool encontrado = false;
+
+    while(fread(&of, sizeof(Org_flia), 1, arch_Org_flia))
+    {
+        if(strcmp(of.id_org_flia, id_buscar) == 0) 
+        {
+            printf("\n\nID Organizacion/Familia: %s - Nombre: %s\n\n", of.id_org_flia, of.nombre);
+            printf("----------------------------------------------\n\n");
+            break;
+        }
+        
+    }
+    rewind(arch_donaciones);
+
+    while(fread(&d, sizeof(Donacion), 1, arch_donaciones))
+    {
+        if (strcmp(d.id_org_flia, id_buscar) == 0)
+        {
+            printf("ID Donacion: %s - Nombre Donacion: %s - Tipo de donacion: %s - Fecha: %02d/%02d/%04d\n\n", d.id_donacion, d.nombre, d.tipo_donacion,
+                   d.fecha_donacion.dia, d.fecha_donacion.mes, d.fecha_donacion.anio);
+            encontrado = true;
+        }
+    }
+
+    system("pause");
+}
+
+//-------------------------------------------------------------------------------------------------------------
+//Gestion de donaciones
 
 bool id_repetido_donacion(FILE *arch_donacion, char id[20])
 {
@@ -219,13 +236,12 @@ bool id_repetido_donacion(FILE *arch_donacion, char id[20])
 void carga_donacion(FILE *arch_donaciones, Donacion d)
 {
     FILE *arch_Org_flia = fopen("org_flia.dat", "rb");
+    
     bool corte = false; int op; 
     
         while(corte != true)
         {    
-            printf("Ingrese el ID unico de la Donacion: "); 
-            fgets(d.id_donacion, 20, stdin); 
-            d.id_donacion[strcspn(d.id_donacion, "\n")] = 0;
+            printf("Ingrese el ID unico de la Donacion: "); gets(d.id_donacion);
 
             if(id_invalido(d.id_donacion) || id_repetido_donacion(arch_donaciones, d.id_donacion))
             {
@@ -233,9 +249,7 @@ void carga_donacion(FILE *arch_donaciones, Donacion d)
                 continue;
             }
 
-            printf("Ingrese el ID de la Organizacion/Familia quien recibe la ayuda (debe de estar registrada): "); 
-            fgets(d.id_org_flia, 20, stdin); 
-            d.id_org_flia[strcspn(d.id_org_flia, "\n")] = 0;
+            printf("Ingrese el ID de la Organizacion/Familia quien recibe la ayuda (debe de estar registrada): "); gets(d.id_org_flia);
 
             if(id_invalido(d.id_org_flia) || !id_repetido_org_flia(arch_Org_flia, d.id_org_flia))
             {
@@ -243,13 +257,9 @@ void carga_donacion(FILE *arch_donaciones, Donacion d)
                 continue;
             }
 
-            printf("\nIngrese un Nombre para la donacion a registrar: "); 
-            fgets(d.nombre, sizeof(d.nombre), stdin);
-            d.nombre[strcspn(d.nombre, "\n")] = '\0';
+            printf("\nIngrese un Nombre para la donacion a registrar: "); gets(d.nombre);
 
-            printf("\nIngrese que Tipo de donacion es: ");
-            fgets(d.tipo_donacion, sizeof(d.tipo_donacion), stdin);
-            d.tipo_donacion[strcspn(d.tipo_donacion, "\n")] = '\0';
+            printf("\nIngrese que Tipo de donacion es: "); gets(d.tipo_donacion);
 
             printf("Ingrese el dia que se hizo la donacion: "); 
             if(scanf("%d",&d.fecha_donacion.dia) == 0)
@@ -274,21 +284,50 @@ void carga_donacion(FILE *arch_donaciones, Donacion d)
             while(getchar() != '\n');
            
 
-            printf("\nIngrese una descripcion o detalle que considere importante: "); 
-            fgets(d.descripcion, sizeof(d.descripcion), stdin);
-            d.descripcion[strcspn(d.descripcion, "\n")] = '\0';
+            printf("\nIngrese una descripcion o detalle que considere importante: "); gets(d.descripcion);
 
             fwrite(&d, sizeof(Donacion), 1, arch_donaciones);
 
-            printf("\n\nDesea cargar otra Donacion? (1-SI / 0-NO): "); scanf("%d", &op);
+            printf("\n\nDesea cargar otra Donacion? (1-SI / 0-NO): "); scanf("%d", &op);  while(getchar() != '\n');
             if(op == 0) corte = true;
         
         } 
 }
 
+
+void eliminar_donacion(FILE *arch_donaciones, Donacion d)
+{
+    char id_eliminar[20];
+    FILE *arch_temp = fopen("temp_donacion.dat", "wb");
+    fflush(stdin);  // limpiar buffer de entrada 
+    printf("Ingrese el ID de la Donacion a eliminar: "); gets(id_eliminar);
+    
+    rewind(arch_donaciones);
+    bool encontrado = false;
+
+    while (fread(&d, sizeof(Donacion), 1, arch_donaciones))
+    {
+        if (strcmp(d.id_donacion, id_eliminar) != 0) fwrite(&d, sizeof(Donacion), 1, arch_temp);
+        else encontrado = true;
+    }
+
+    fclose(arch_donaciones);
+    fclose(arch_temp);
+
+    remove("donaciones.dat");
+    rename("temp_donacion.dat", "donaciones.dat");
+
+    arch_donaciones = fopen("donaciones.dat", "rb"); // aqui se reabre el archivo para futuras operaciones
+    if (encontrado) printf("Donacion con ID %s eliminada exitosamente\n", id_eliminar);
+    else  printf("No se encontro una Donacion con ID %s\n", id_eliminar);
+
+    system("pause");
+}
+
+
 void listar_donaciones(FILE *arch_donaciones, Donacion d)
 {
-    FILE *arch_Org_flia = fopen("org_flia.dat", "rb");  
+    FILE *arch_Org_flia = fopen("org_flia.dat", "rb");
     Org_flia of;
 
     rewind(arch_donaciones);
@@ -306,21 +345,22 @@ void listar_donaciones(FILE *arch_donaciones, Donacion d)
                 printf("%-10s %-25s %-30s %-20s %02d/%02d/%04d %-50s\n", d.id_donacion, d.nombre, of.nombre, d.tipo_donacion, d.fecha_donacion.dia, 
                        d.fecha_donacion.mes, 
                        d.fecha_donacion.anio, 
-                       "    .....");
+                       "      .....");
                 printf("-----------------------------------------------------------------------------------------------------------------------------\n");
                 break;
             }
         }
     }
 
+    
+
     printf("\n\n");
     while(getchar() != '\n');
 
     while(true)
     {
-        printf("SI DESEA LEER LA DESCRIPCION DE ALGUNA DONACION INGRESE SU ID, SI NO DESEA LEER NINGUNA INGRESE 0 PARA TERMINAR: "); char id_donacion[20];
-        fgets(id_donacion, 20, stdin);
-        id_donacion[strcspn(id_donacion, "\n")] = '\0';
+        printf("SI DESEA LEER LA DESCRIPCION DE ALGUNA DONACION INGRESE SU ID, SI NO DESEA LEER NINGUNA INGRESE 0 PARA TERMINAR: "); 
+        char id_donacion[20]; gets(id_donacion);
 
         if (strcmp(id_donacion, "0") != 0)
         {
@@ -342,52 +382,18 @@ void listar_donaciones(FILE *arch_donaciones, Donacion d)
         }
         else return;
     }
-    
     system("pause");
     
 }
 
-void eliminar_donacion(FILE *arch_donaciones, Donacion d)
-{
-    char id_eliminar[20];
-    FILE *arch_temp = fopen("temp_donacion.dat", "wb");
-
-    printf("Ingrese el ID de la Donacion a eliminar: ");
-    fflush(stdin); // limpiar buffer de entrada
-    fgets(id_eliminar, 20, stdin);
-    id_eliminar[strcspn(id_eliminar, "\n")] = 0;
-
-    rewind(arch_donaciones);
-    bool encontrado = false;
-
-    while (fread(&d, sizeof(Donacion), 1, arch_donaciones))
-    {
-        if (strcmp(d.id_donacion, id_eliminar) != 0) fwrite(&d, sizeof(Donacion), 1, arch_temp);
-        else encontrado = true;
-    }
-
-    fclose(arch_donaciones);
-    fclose(arch_temp);
-
-    remove("donaciones.dat");
-    rename("temp_donacion.dat", "donaciones.dat");
-
-    if (encontrado) printf("Donacion con ID %s eliminada exitosamente\n", id_eliminar);
-    else  printf("No se encontro una Donacion con ID %s\n", id_eliminar);
-
-    system("pause");
-}
 
 
 void actualizar_donacion(FILE *arch_donaciones, Donacion d)
 {
     char id_modificar[20];
     bool encontrado = false;
-
-    printf("Ingrese el ID de la Donacion a modificar: ");
     fflush(stdin);
-    fgets(id_modificar, 20, stdin);
-    id_modificar[strcspn(id_modificar, "\n")] = 0;
+    printf("Ingrese el ID de la Donacion a modificar: "); gets(id_modificar);
 
     arch_donaciones = fopen("donaciones.dat", "rb+");
     rewind(arch_donaciones);
@@ -398,17 +404,11 @@ void actualizar_donacion(FILE *arch_donaciones, Donacion d)
         {
             encontrado = true;
 
-            printf("Ingrese un nuevo Nombre para la donacion a registrar: "); 
-            fgets(d.nombre, sizeof(d.nombre), stdin);
-            d.nombre[strcspn(d.nombre, "\n")] = '\0';
+            printf("Ingrese un nuevo Nombre para la donacion a registrar: "); gets(d.nombre);
 
-            printf("Ingrese que Tipo de donacion es: ");
-            fgets(d.tipo_donacion, sizeof(d.tipo_donacion), stdin);
-            d.tipo_donacion[strcspn(d.tipo_donacion, "\n")] = '\0';
+            printf("Ingrese que Tipo de donacion es: "); gets(d.tipo_donacion);
 
-            printf("Ingrese una descripcion o detalle que considere importante: "); 
-            fgets(d.descripcion, sizeof(d.descripcion), stdin);
-            d.descripcion[strcspn(d.descripcion, "\n")] = '\0';
+            printf("Ingrese una descripcion o detalle nuevo que considere importante: "); gets(d.descripcion);
 
             printf("Ingrese el dia que se hizo la donacion: "); 
             if(scanf("%d",&d.fecha_donacion.dia) == 0)
@@ -445,3 +445,75 @@ void actualizar_donacion(FILE *arch_donaciones, Donacion d)
     system("pause");
     fclose(arch_donaciones);
 }
+
+
+// bool contraseña_invalida(char contraseña[20])
+// {
+//     //pautas para una contraseña bien formateada
+//     bool a = false, b = false, c = false, d = false, e = false;
+
+//     bool tiene_mayuscula = false;
+//     bool tiene_minuscula = false;
+//     bool tiene_digito = false;
+    
+//     int longitud = strlen(contraseña);
+
+//     for(int i = 0; i < longitud; i++)
+//     {
+//         if(isupper(contraseña[i])) tiene_mayuscula = true;
+//         if(islower(contraseña[i])) tiene_minuscula = true;
+//         if(isdigit(contraseña[i])) tiene_digito = true;
+//     }
+    
+//     if(tiene_mayuscula && tiene_minuscula && tiene_digito) a = true;
+    
+//     char caracteres_prohibidos[20] = ".,+- ";
+//     if (!strpbrk(contraseña, caracteres_prohibidos))  b=true; 
+
+//     if (longitud >= 6 && longitud <= 32) c=true;
+
+//     d = true;
+//     int digitos_consecutivos = 0;
+    
+//     for(int i = 0; i < longitud; i++)
+//     {
+//         if(isdigit(contraseña[i]))
+//         {
+//             digitos_consecutivos++;
+//             if(digitos_consecutivos > 3)
+//             {
+//                 d = false;
+//                 break;
+//             }
+//         }
+//         else digitos_consecutivos = 0;  
+//     }
+
+    
+//     e = true;
+//     for(int i = 0; i < longitud - 1; i++)
+//     {
+//         char actual = contraseña[i];
+//         char siguiente = contraseña[i + 1];
+        
+//         if(isalpha(actual) && isalpha(siguiente))
+//         {
+//             char actual_lower = tolower(actual);
+//             char siguiente_lower = tolower(siguiente);
+            
+//             if(siguiente_lower == actual_lower + 1)
+//             {
+//                 e = false;
+//                 break;
+//             }
+//         }
+//     }
+
+//     if(a && b && c && d && e) return true;
+//     else return false;
+
+// }
+
+
+//--------------------------------------------------------------------------------------------
+//Gestion de usuarios
