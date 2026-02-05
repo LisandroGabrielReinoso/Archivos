@@ -54,7 +54,7 @@ void carga_org_flia(FILE *arch_Org_flia, Org_flia of)
 
             if(id_invalido(of.id_org_flia) || id_repetido_org_flia(arch_Org_flia, of.id_org_flia))
             {
-                printf("ID invalido, Ingrese formato valido o un ID distinto\n"); //system("pause"); system("cls");
+                printf("ID invalido, ingrese formato valido o un ID distinto\n"); //system("pause"); system("cls");
                 continue;
             }
 
@@ -110,7 +110,7 @@ void eliminar_org_flia(FILE *arch_Org_flia, Org_flia of)
     {
         if (strcmp(d.id_org_flia, id_eliminar) == 0)
         {
-            printf("No se puede eliminar la Organizacion/Familia con ID %s porque tiene donaciones registradas. Primero elimine las donaciones asociadas.\n", id_eliminar);
+            printf("No se puede eliminar la Organizacion/Familia con ID %s porque tiene donaciones registradas, primero elimine las donaciones asociadas.\n", id_eliminar);
             fclose(arch_temp);
             fclose(arch_donaciones);
             remove("temp.dat");
@@ -136,7 +136,7 @@ void eliminar_org_flia(FILE *arch_Org_flia, Org_flia of)
     remove("org_flia.dat");
     rename("temp.dat", "org_flia.dat");
 
-    arch_Org_flia = fopen("org_flia.dat", "rb+"); // aqui se reabre el archivo para futuras operaciones
+    arch_Org_flia = fopen("org_flia.dat", "rb+"); // aqui se reabre el archivo para futuras operaciones 
 
     if (encontrado) printf("Organizacion/Familia con ID %s eliminada exitosamente.\n", id_eliminar);
 
@@ -175,7 +175,7 @@ void actualizar_org_flia(FILE *arch_Org_flia, Org_flia of)
         }
     }
 
-    if (encontrado) printf("Organizacion/Familia con ID %s modificada exitosamente.\n", id_modificar);
+    if (encontrado) printf("Organizacion/Familia con ID %s actualizada con exito.\n", id_modificar);
     else printf("No se encontro una Organizacion/Familia con ID %s.\n", id_modificar);
 
     system("pause");

@@ -44,7 +44,6 @@ void menu_gestion_org_flia(FILE *arch_org_flia, Org_flia of) {
             case 3:
                 system("cls");
                 eliminar_org_flia(arch_org_flia, of);
-                // ← REABRE AQUÍ
                 system("cls");
 
             case 4:
@@ -102,9 +101,6 @@ void gestionar_donaciones(FILE *arch_donaciones, Donacion d)
             case 3:
                 system("cls");
                 eliminar_donacion(arch_donaciones, d);
-                // ← REABRE AQUÍ
-                fclose(arch_donaciones);
-                arch_donaciones = fopen("donaciones.dat", "rb");
                 system("cls");
                 break;
 
