@@ -14,6 +14,7 @@ void carga_donacion(FILE *arch_donaciones, Donacion d);
 void listar_donaciones(FILE *arch_donaciones, Donacion d);
 void eliminar_donacion(FILE *arch_donaciones, Donacion d);
 void actualizar_donacion(FILE *arch_donaciones, Donacion d);
+void cargar_usuario(FILE *arch_usuarios, Usuario u);
 
 
 #endif

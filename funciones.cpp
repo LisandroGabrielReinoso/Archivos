@@ -447,73 +447,132 @@ void actualizar_donacion(FILE *arch_donaciones, Donacion d)
 }
 
 
-// bool contraseña_invalida(char contraseña[20])
-// {
-//     //pautas para una contraseña bien formateada
-//     bool a = false, b = false, c = false, d = false, e = false;
+bool contraseña_valida(char contraseña[20])
+{
+    //pautas para una contraseña bien formateada
+    bool a = false, b = false, c = false, d = false, e = false;
 
-//     bool tiene_mayuscula = false;
-//     bool tiene_minuscula = false;
-//     bool tiene_digito = false;
+    bool tiene_mayuscula = false;
+    bool tiene_minuscula = false;
+    bool tiene_digito = false;
     
-//     int longitud = strlen(contraseña);
+    int longitud = strlen(contraseña);
 
-//     for(int i = 0; i < longitud; i++)
-//     {
-//         if(isupper(contraseña[i])) tiene_mayuscula = true;
-//         if(islower(contraseña[i])) tiene_minuscula = true;
-//         if(isdigit(contraseña[i])) tiene_digito = true;
-//     }
+    for(int i = 0; i < longitud; i++)
+    {
+        if(isupper(contraseña[i])) tiene_mayuscula = true;
+        if(islower(contraseña[i])) tiene_minuscula = true;
+        if(isdigit(contraseña[i])) tiene_digito = true;
+    }
     
-//     if(tiene_mayuscula && tiene_minuscula && tiene_digito) a = true;
+    if(tiene_mayuscula && tiene_minuscula && tiene_digito) a = true;
     
-//     char caracteres_prohibidos[20] = ".,+- ";
-//     if (!strpbrk(contraseña, caracteres_prohibidos))  b=true; 
+    char caracteres_prohibidos[20] = ".,+- ";
+    if (!strpbrk(contraseña, caracteres_prohibidos))  b=true; 
 
-//     if (longitud >= 6 && longitud <= 32) c=true;
+    if (longitud >= 6 && longitud <= 32) c=true;
 
-//     d = true;
-//     int digitos_consecutivos = 0;
+    int digitos = 0;
     
-//     for(int i = 0; i < longitud; i++)
-//     {
-//         if(isdigit(contraseña[i]))
-//         {
-//             digitos_consecutivos++;
-//             if(digitos_consecutivos > 3)
-//             {
-//                 d = false;
-//                 break;
-//             }
-//         }
-//         else digitos_consecutivos = 0;  
-//     }
+    for(int i = 0; i < longitud; i++)
+    {
+        if(isdigit(contraseña[i])) digitos++;
+    }
 
+    if(digitos <= 3) d = true;       
     
-//     e = true;
-//     for(int i = 0; i < longitud - 1; i++)
-//     {
-//         char actual = contraseña[i];
-//         char siguiente = contraseña[i + 1];
+    e = true;
+    for(int i = 0; i < longitud - 1; i++)
+    {
+        char actual = contraseña[i];
+        char siguiente = contraseña[i + 1];
         
-//         if(isalpha(actual) && isalpha(siguiente))
-//         {
-//             char actual_lower = tolower(actual);
-//             char siguiente_lower = tolower(siguiente);
+        if(isalpha(actual) && isalpha(siguiente))
+        {
+            char actual_lower = tolower(actual);
+            char siguiente_lower = tolower(siguiente);
             
-//             if(siguiente_lower == actual_lower + 1)
-//             {
-//                 e = false;
-//                 break;
-//             }
-//         }
-//     }
+            if(actual_lower + 1 == siguiente_lower )
+            {
+                e = false;
+                break;
+            }
+        }
+    }
 
-//     if(a && b && c && d && e) return true;
-//     else return false;
+    if(a && b && c && d && e) return true;
+    else return false;
+}
 
-// }
+bool usuario_valido(char usuario[15], FILE *arch_usuarios, Usuario u)
+{
+     //= fopen("usuarios.dat", "ab+"); Usuario u;
+    bool a=false ,b = false, c = false, d = false; //consignas
+    int longitud = strlen(usuario);
 
+    if(longitud >= 6 && longitud <= 10) a = true;
+
+    if(islower(usuario[0])) b = true;
+    
+    int mayusculas=0, digitos=0; 
+    for(int i=0; i<longitud; i++)
+    {
+        if(isupper(usuario[i])) mayusculas++;
+        if(isdigit(usuario[i])) digitos++;
+    }
+
+    if(mayusculas >= 2) c = true;
+    if(digitos <= 3) d = true;
+    
+    rewind(arch_usuarios);
+    while(fread(&u, sizeof(Usuario), 1, arch_usuarios))
+    {
+        if(strcmp(u.nombre_usuario, usuario) == 0)
+        {
+            fclose(arch_usuarios);
+            printf("El nombre de usuario ya existe, ingrese uno diferente.\n"); system("pause");
+            return false;
+        }
+    }
+    
+    if(a && b && c && d) return true;
+    else
+    {
+        printf("Usuario invalido. \n"); system("pause");
+        return false;
+    } 
+}
+
+void cargar_usuario(FILE *arch_usuarios, Usuario u)
+{
+    fflush(stdin);
+    int op;
+    while(op != 0)
+    {
+        printf("Ingrese un nombre de usuario: "); gets(u.nombre_usuario);
+        if(!usuario_valido(u.nombre_usuario, arch_usuarios, u))
+        {
+            printf("Nombre de usuario invalido"); system("cls");
+            continue;  
+        } 
+        fflush(stdin);
+
+        printf("Ingrese una contrasena: "); gets(u.contrasena);
+        if(!contraseña_valida(u.contrasena))
+        {
+            system("pause");
+            continue;
+        }
+
+        fwrite(&u, sizeof(Usuario), 1, arch_usuarios);
+        fflush(stdin);
+        printf("Desea ingresar otro usuario (1-SI / 0-NO): "); scanf("%d", &op); while(getchar() != '\n');
+        
+        if(op == 0) break;
+        fflush(stdin);
+    }
+    
+}
 
 //--------------------------------------------------------------------------------------------
 //Gestion de usuarios

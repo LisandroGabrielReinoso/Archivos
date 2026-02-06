@@ -10,15 +10,19 @@ int main() {
 
     FILE *arch_org_flia = fopen("org_flia.dat", "ab+");
     FILE *arch_donaciones = fopen("donaciones.dat", "ab+");
+    FILE *arch_usuarios = fopen("usuarios.dat", "ab+");
   
-    if (arch_org_flia == NULL || arch_donaciones == NULL) printf("Error al abrir los archivos.\n");
+    if (arch_org_flia == NULL || arch_donaciones == NULL || arch_usuarios == NULL) printf("Error al abrir los archivos.\n");
 
-    Org_flia of; Donacion d;
+    Org_flia of; Donacion d; Usuario u;
     
     int op;
     bool salir = false;
 
-    while (salir != true) {
+    system("cls");
+    login(arch_usuarios, u);
+    
+    while (salir != true) {    
 
         system("cls");
         menu_principal();
@@ -37,6 +41,12 @@ int main() {
                 break;
 
             case 3:
+                system("cls");
+                cargar_usuario(arch_usuarios, u);
+                system("cls");
+                break;
+
+            case 4:
                 salir = true;
                 break;
 

@@ -25,4 +25,9 @@ struct Donacion {
 	char descripcion[550];
 };
 
+struct Usuario {
+	char nombre_usuario[20];
+	char contrasena[40];
+};
+
 #endif

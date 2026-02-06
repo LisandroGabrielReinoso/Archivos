@@ -4,12 +4,39 @@
 #include "funciones.h"
 #include "structs.h"
 
+void login(FILE *arch_usuarios, Usuario u){
+
+    while(true){
+        printf("\n\n********** INICIO DE SESION **********\n\n");
+        printf("Ingrese su nombre de usuario: "); char usuario[20]; gets(usuario);
+        printf("Ingrese su contrasena: "); char contraseña[20]; gets(contraseña);
+
+        rewind(arch_usuarios);
+        while(fread(&u, sizeof(Usuario), 1, arch_usuarios))
+        {
+            if(strcmp(u.nombre_usuario, usuario) == 0 && strcmp(u.contrasena, contraseña) == 0)
+            {
+                printf("Bienvenido %s\n", u.nombre_usuario);
+                system("pause");
+                system("cls");
+                return;
+            }
+        }
+        printf("Usuario o contrasena incorrectos\n"); system("pause"); system("cls");
+
+    }
+    
+
+}
+
+
 void menu_principal() {
     printf("\n\n\n************************** MENU PRINCIPAL **************************\n");
     printf("\nSeleccione el numero de una de las opciones para continuar\n\n");
     printf("1 - Gestion de Familias/Organizaciones\n");
     printf("2 - Gestion de Donaciones/Ayudas\n");
-    printf("3 - Salir del sistema\n\n");
+    printf("3 - Agregar nuevo usuario\n");
+    printf("4 - Salir del sistema\n\n");
 
 }
 
